@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="bg">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Есенна приключения: Нахрани животните</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Начален екран -->
+    <div id="start-screen">
+      <div class="start-box">
+        <h1>Есенни приключения в гората</h1>
+        <p>Животните се подготвят за зимата. Ще им помогнеш ли да си намерят храна?</p>
+        <button id="start-btn">Започни играта</button>
+      </div>
+    </div>
+
+    <div id="game-area">
+      <!-- Фонов слой -->
+      <div id="bg-image"></div>
+
+      <!-- Инструкции -->
+      <div class="instructions">
+        <h1>Есенна гора</h1>
+        <p>Всяко животно иска по ДВЕ лакомства!</p>
+      </div>
+
+      <!-- Контейнер за падащите листа -->
+      <div id="leaves-container"></div>
+
+      <!-- Балонче за реч (Диалог) -->
+      <div id="speech-bubble"></div>
+
+      <div class="game-layer">
+        <!-- Животни (Цели) -->
+        <img src="/assets/bear.png" id="bear" class="animal" alt="Мечка" draggable="false" />
+        <img
+          src="/assets/squirrel.png"
+          id="squirrel"
+          class="animal"
+          alt="Катерица"
+          draggable="false"
+        />
+        <img
+          src="/assets/hedgehog.png"
+          id="hedgehog"
+          class="animal"
+          alt="Таралеж"
+          draggable="false"
+        />
+
+        <!-- Храни за Мечката -->
+        <img
+          src="/assets/fish.png"
+          id="fish"
+          class="food"
+          data-target="bear"
+          alt="Риба"
+          draggable="false"
+        />
+        <img
+          src="/assets/honey.png"
+          id="beehive"
+          class="food"
+          data-target="bear"
+          alt="Кошер с мед"
+          draggable="false"
+        />
+
+        <!-- Храни за Катерицата -->
+        <img
+          src="/assets/acorn.png"
+          id="acorn"
+          class="food"
+          data-target="squirrel"
+          alt="Жълъд"
+          draggable="false"
+        />
+        <img
+          src="/assets/walnut.png"
+          id="walnut"
+          class="food"
+          data-target="squirrel"
+          alt="Орех"
+          draggable="false"
+        />
+
+        <!-- Храни за Таралежа -->
+        <img
+          src="/assets/apple.png"
+          id="apple"
+          class="food"
+          data-target="hedgehog"
+          alt="Ябълка"
+          draggable="false"
+        />
+        <img
+          src="/assets/mushroom.png"
+          id="mushroom"
+          class="food"
+          data-target="hedgehog"
+          alt="Гъба"
+          draggable="false"
+        />
+      </div>
+    </div>
+
+    <!-- Екран при победа -->
+    <div id="victory-screen">
+      <h1>Браво!</h1>
+      <p>Ти нахрани всички животни за зимата!</p>
+      <button onclick="location.reload()">Играй отново</button>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
