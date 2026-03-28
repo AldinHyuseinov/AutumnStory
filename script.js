@@ -2,7 +2,7 @@
 const leavesContainer = document.getElementById("leaves-container");
 function createLeaf() {
   const leaf = document.createElement("img");
-  leaf.src = "/assets/leaf.png";
+  leaf.src = "./assets/leaf.png";
   leaf.classList.add("leaf");
   leaf.style.width = Math.random() * 3 + 2 + "%"; // Размер в % спрямо играта
   leaf.style.left = Math.random() * 100 + "%";
