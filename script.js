@@ -1,4 +1,4 @@
-// Създаване на есенни листа - ОГРАНИЧЕНИ в контейнера
+// Създаване на есенни листа
 const leavesContainer = document.getElementById("leaves-container");
 function createLeaf() {
   const leaf = document.createElement("img");
@@ -44,7 +44,9 @@ const dialogues = {
   },
 };
 
-// СТАРТ НА ИГРАТА ОТ БУТОНА
+const bgMusic = document.getElementById("bg-music");
+bgMusic.volume = 0.2;
+
 window.onload = () => {
   const startBtn = document.getElementById("start-btn");
   const startScreen = document.getElementById("start-screen");
@@ -54,14 +56,14 @@ window.onload = () => {
     startScreen.style.transition = "opacity 0.8s ease";
     startScreen.style.opacity = "0";
 
+    bgMusic.play().catch((error) => console.log("Музиката е блокирана от браузъра:", error));
+
     setTimeout(() => {
       startScreen.style.display = "none";
       instructions.style.display = "block";
-
       requestAnimationFrame(() => {
         instructions.classList.add("animate-in");
       });
-
       startStage(currentStageIndex);
     }, 800);
   });
@@ -115,7 +117,7 @@ function showDialogue(animalId, text, autoHide = false, delay = 3500) {
   }
 }
 
-// ---------------- DRAG AND DROP ЛОГИКА (ОБНОВЕНА) ---------------- //
+// ---------------- DRAG AND DROP ЛОГИКА ---------------- //
 let draggedItem = null;
 let offsetX = 0,
   offsetY = 0;
@@ -170,6 +172,10 @@ function onPointerUp(e) {
     if (targetFoodId === activeAnimalId) {
       processCorrectFood(draggedItem, activeAnimal, activeAnimalId);
     } else {
+      const errorSound = document.getElementById("error-sound");
+      errorSound.currentTime = 0; // Рестартира звука, ако се кликне бързо
+      errorSound.play();
+
       showDialogue(activeAnimalId, dialogues[activeAnimalId].wrong, true, 3000);
       snapBack(draggedItem);
     }
@@ -212,6 +218,13 @@ function processCorrectFood(food, animal, animalId) {
   food.style.display = "none";
   itemsEaten++;
 
+  const successSound = document.getElementById("success-sound");
+  successSound.currentTime = 0;
+  successSound.play();
+  setTimeout(() => {
+    successSound.pause();
+  }, 1000);
+
   animal.classList.add("happy");
   createSparkles(animal);
 
@@ -224,16 +237,13 @@ function processCorrectFood(food, animal, animalId) {
     }, 3000);
   } else if (itemsEaten === 2) {
     showDialogue(animalId, dialogues[animalId].correct, false);
-
     setTimeout(() => {
       showDialogue(animalId, dialogues[animalId].thanks, false);
-
       setTimeout(() => {
         document.getElementById("speech-bubble").style.opacity = 0;
         animal.classList.remove("happy");
         animal.classList.remove("active-animal");
         animal.classList.add("dimmed");
-
         currentStageIndex++;
         if (currentStageIndex < order.length) {
           startStage(currentStageIndex);
@@ -271,6 +281,13 @@ function createSparkles(animal) {
 }
 
 function showVictory() {
+  // Намаляваме фоновата музика, за да се чуе триумфалния звук
+  bgMusic.animate({ volume: 0 }, 1000);
+  setTimeout(() => bgMusic.pause(), 1000);
+
+  const victorySound = document.getElementById("victory-sound");
+  victorySound.play();
+
   const vs = document.getElementById("victory-screen");
   vs.style.display = "flex";
   void vs.offsetWidth;

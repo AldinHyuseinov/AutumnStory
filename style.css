@@ -167,30 +167,29 @@ body {
 }
 
 #bear {
-  width: 20em;
+  width: clamp(6em, 15vw, 20em);
   left: 45%;
   top: 56%;
 }
 #squirrel {
-  width: 20em;
+  width: clamp(6em, 15vw, 20em);
   left: 10%;
   top: 60%;
 }
 #hedgehog {
-  width: 15em;
+  width: clamp(4em, 11vw, 15em);
   left: 80%;
   top: 60%;
 }
 
 .food {
   position: absolute;
-  width: 80px;
+  width: clamp(50px, 8vw, 80px);
   cursor: grab;
   filter: drop-shadow(0px 6px 10px rgba(0, 0, 0, 0.7));
   z-index: 10;
   transition: filter 0.3s;
   animation: float-food 3s infinite ease-in-out;
-  -webkit-user-drag: none;
 }
 .food:hover {
   filter: drop-shadow(0px 0px 20px white);
