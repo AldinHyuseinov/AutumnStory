@@ -30,7 +30,6 @@ body {
   width: 100vw;
   height: 56.25vw; /* 9/16 * 100 = 56.25 */
   max-height: 100vh;
-  max-width: 177.78vh; /* 16/9 * 100 = 177.78 */
   overflow: hidden;
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
   background-color: #fff;
@@ -438,4 +437,85 @@ body {
 #start-btn:active {
   transform: translateY(5px);
   box-shadow: 0 5px 0 #e67e22;
+}
+
+/* Иконка за отваряне на звуковите настройки */
+#volume-btn {
+  position: absolute;
+  top: 2cqi;
+  right: 2cqi;
+  width: 5cqi;
+  cursor: pointer;
+  z-index: 2000;
+  transition: transform 0.2s;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4));
+}
+#volume-btn:hover {
+  transform: scale(1.1);
+}
+
+/* Панел за настройки */
+#volume-panel {
+  display: none; /* Скрит по подразбиране */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 3cqi 5cqi;
+  border-radius: 3cqi;
+  border: 0.6cqi solid #ff8c00;
+  box-shadow: 0 10cqi 30cqi rgba(0, 0, 0, 0.6);
+  z-index: 3000; /* Най-отгоре */
+  text-align: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+#volume-panel h2 {
+  margin: 0 0 2cqi 0;
+  color: #d35400;
+  font-size: 3cqi;
+  text-shadow: 1px 1px 0 white;
+}
+
+/* Контейнер за плъзгача и иконките */
+.slider-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5cqi;
+  margin-bottom: 3cqi;
+}
+
+.slider-container img {
+  width: 4cqi;
+}
+
+/* Самият плъзгач */
+#volume-slider {
+  width: 20cqi;
+  height: 1.5cqi;
+  accent-color: #ff8c00; /* Оцветява плъзгача в оранжево (работи в модерните браузъри) */
+  cursor: pointer;
+}
+
+/* Бутон "Готово" */
+#close-volume {
+  padding: 1.2cqi 4cqi;
+  font-size: 2cqi;
+  background: #32cd32;
+  color: white;
+  border: none;
+  border-radius: 3cqi;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 0.5cqi 0 #228b22;
+  transition:
+    transform 0.1s,
+    box-shadow 0.1s;
+}
+#close-volume:active {
+  transform: translateY(0.5cqi);
+  box-shadow: 0 0 0 #228b22;
 }

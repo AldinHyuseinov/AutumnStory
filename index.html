@@ -26,6 +26,25 @@
         <p>Всяко животно иска по ДВЕ лакомства!</p>
       </div>
 
+      <!-- Бутон за звук горе вдясно -->
+      <img src="./assets/volume.png" id="volume-btn" alt="Звук" draggable="false" />
+
+      <!-- Панел за контрол на звука -->
+      <div id="volume-panel">
+        <h2>Сила на звука</h2>
+        <div class="slider-container">
+          <!-- Иконка за тихо -->
+          <img src="./assets/mute.png" alt="Тихо" draggable="false" />
+
+          <!-- Плъзгач -->
+          <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.8" />
+
+          <!-- Иконка за силно -->
+          <img src="./assets/volume.png" alt="Силно" draggable="false" />
+        </div>
+        <button id="close-volume">Готово</button>
+      </div>
+
       <!-- Контейнер за падащите листа -->
       <div id="leaves-container"></div>
 

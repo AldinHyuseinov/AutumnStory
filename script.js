@@ -85,7 +85,51 @@ function playVoice(animalId, type) {
 }
 
 const bgMusic = document.getElementById("bg-music");
-bgMusic.volume = 0.2;
+
+// ---------------- КОНТРОЛ НА ЗВУКА ---------------- //
+const volumeBtn = document.getElementById("volume-btn");
+const volumePanel = document.getElementById("volume-panel");
+const closeVolumeBtn = document.getElementById("close-volume");
+const volumeSlider = document.getElementById("volume-slider");
+
+// Основна функция за обновяване на всички звуци
+function updateAllVolumes(masterVolume) {
+  if (bgMusic) bgMusic.volume = masterVolume * 0.3;
+
+  // Ефекти (Звънчета, грешки и победа)
+  const successSound = document.getElementById("success-sound");
+  if (successSound) successSound.volume = masterVolume;
+
+  const errorSound = document.getElementById("error-sound");
+  if (errorSound) errorSound.volume = masterVolume;
+
+  const victorySound = document.getElementById("victory-sound");
+  if (victorySound) victorySound.volume = masterVolume;
+
+  // Гласовете на всички животни (Търсим всички аудио тагове, чието ID съдържа "-voice-file")
+  document.querySelectorAll('audio[id$="-voice-file"]').forEach((voice) => {
+    voice.volume = masterVolume;
+  });
+}
+
+// Задаваме първоначалния звук при зареждане (взема се от value="0.8" в HTML-а)
+updateAllVolumes(parseFloat(volumeSlider.value));
+
+// Отваряне на панела
+volumeBtn.addEventListener("click", () => {
+  volumePanel.style.display = "flex";
+});
+
+// Затваряне на панела
+closeVolumeBtn.addEventListener("click", () => {
+  volumePanel.style.display = "none";
+});
+
+// Промяна на звука в реално време, докато се мести плъзгача
+volumeSlider.addEventListener("input", (e) => {
+  const currentVol = parseFloat(e.target.value);
+  updateAllVolumes(currentVol);
+});
 
 window.onload = () => {
   const startBtn = document.getElementById("start-btn");
