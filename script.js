@@ -22,27 +22,67 @@ let dialogueTimeout;
 
 const dialogues = {
   bear: {
-    intro: "Здравей! Аз съм Мечо. Моля те, помогни ми да намеря вкусна храна за зимата!",
-    wrong: "Блее! Това не го ям. Потърси моята храна!",
-    partial: "Ммм, много вкусно! Но коремчето ми иска и другото лакомство!",
-    correct: "Еха! Рибка и мед – любимото ми меню!",
-    thanks: "Благодаря ти! Готов съм за сън. Сега помогни на катеричката!",
+    intro: {
+      text: "Здравей! Аз съм Мечо. Моля те, помогни ми да намеря вкусна храна за зимата!",
+      start: 0,
+      dur: 7.4,
+    },
+    wrong: { text: "Блее! Това не го ям. Потърси моята храна!", start: 3.6, dur: 5 },
+    partial: {
+      text: "Ммм, много вкусно! Но коремчето ми иска и другото лакомство!",
+      start: 6.5,
+      dur: 6.3,
+    },
+    thanks: {
+      text: "Благoдаря ти! Готов съм за сън. Сега помогни на катеричката!",
+      start: 12,
+      dur: 7.4,
+    },
   },
   squirrel: {
-    intro: "Здравей! Аз съм катеричката Роси. Трябват ми храна за зимата!",
-    wrong: "Ох, не! Това не е за мен.",
-    partial: "Ехаа! Страхотно, но имам нужда от още нещо за зимата!",
-    correct: "Точно това търсех!",
-    thanks: "Ура! Събрах достатъчно! Ред е на малкия таралеж.",
+    intro: {
+      text: "Здравей! Аз съм катеричката Роси. Трябва ми храна за зимата!",
+      start: 0,
+      dur: 6,
+    },
+    wrong: { text: "Ох, не! Това не е за мен.", start: 3, dur: 3.3 },
+    partial: {
+      text: "Ехаа! Страхотно, но имам нужда от още нещо за зимата!",
+      start: 4.5,
+      dur: 6.5,
+    },
+    thanks: { text: "Ура! Събрах достатъчно! Ред е на малкия таралеж.", start: 9, dur: 6 },
   },
   hedgehog: {
-    intro: "Здравейте! Аз съм таралежът Ежко. Търся си храна.",
-    wrong: "Оф, това не го харесвам. Потърси нещо по-вкусно за мен!",
-    partial: "Чудесно! А къде е другото?",
-    correct: "Еха! Страхотна червена ябълка и вкусна гъбка!",
-    thanks: "Много ти благодаря! Вече всички сме готови за зимата!",
+    intro: { text: "Здравей! Аз съм таралежът Ежко. Търся си храна.", start: 0, dur: 5.5 },
+    wrong: { text: "Оф, това не го харесвам. Потърси нещо по-вкусно за мен!", start: 2.5, dur: 5 },
+    partial: { text: "Чудесно! А къде е другото?", start: 5, dur: 4 },
+    thanks: { text: "Много ти благодаря! Вече всички сме готови за зимата!", start: 7, dur: 5 },
   },
 };
+
+let currentVoiceClip = null;
+
+function playVoice(animalId, type) {
+  const voiceFile = document.getElementById(`${animalId}-voice-file`);
+  const clipData = dialogues[animalId][type];
+
+  if (!voiceFile || !clipData) return;
+
+  // Спираме предишния глас, ако още говори
+  voiceFile.pause();
+
+  // Превъртаме до стартовата секунда
+  voiceFile.currentTime = clipData.start;
+  voiceFile.play();
+
+  // Спираме аудиото точно след продължителността на репликата
+  if (currentVoiceClip) clearTimeout(currentVoiceClip);
+
+  currentVoiceClip = setTimeout(() => {
+    voiceFile.pause();
+  }, clipData.dur * 1000);
+}
 
 const bgMusic = document.getElementById("bg-music");
 bgMusic.volume = 0.2;
@@ -86,9 +126,10 @@ function startStage(index) {
 
   isAnimating = true;
   setTimeout(() => {
-    showDialogue(activeAnimalId, dialogues[activeAnimalId].intro, false);
+    showDialogue(activeAnimalId, dialogues[activeAnimalId].intro.text, false);
+    playVoice(activeAnimalId, "intro");
     isAnimating = false;
-  }, 500);
+  }, dialogues[activeAnimalId].intro.start * 1000);
 }
 
 function showDialogue(animalId, text, autoHide = false, delay = 3500) {
@@ -176,7 +217,13 @@ function onPointerUp(e) {
       errorSound.currentTime = 0; // Рестартира звука, ако се кликне бързо
       errorSound.play();
 
-      showDialogue(activeAnimalId, dialogues[activeAnimalId].wrong, true, 3000);
+      showDialogue(
+        activeAnimalId,
+        dialogues[activeAnimalId].wrong.text,
+        true,
+        dialogues[activeAnimalId].wrong.dur * 1000,
+      );
+      playVoice(activeAnimalId, "wrong");
       snapBack(draggedItem);
     }
   } else {
@@ -229,29 +276,30 @@ function processCorrectFood(food, animal, animalId) {
   createSparkles(animal);
 
   if (itemsEaten === 1) {
-    showDialogue(animalId, dialogues[animalId].partial, false);
+    showDialogue(animalId, dialogues[animalId].partial.text);
+    playVoice(animalId, "partial");
+
     setTimeout(() => {
       animal.classList.remove("happy");
       document.getElementById("speech-bubble").style.opacity = 0;
       isAnimating = false;
-    }, 3000);
+    }, dialogues[animalId].partial.dur * 1000);
   } else if (itemsEaten === 2) {
-    showDialogue(animalId, dialogues[animalId].correct, false);
+    showDialogue(animalId, dialogues[animalId].thanks.text);
+    playVoice(animalId, "thanks");
+
     setTimeout(() => {
-      showDialogue(animalId, dialogues[animalId].thanks, false);
-      setTimeout(() => {
-        document.getElementById("speech-bubble").style.opacity = 0;
-        animal.classList.remove("happy");
-        animal.classList.remove("active-animal");
-        animal.classList.add("dimmed");
-        currentStageIndex++;
-        if (currentStageIndex < order.length) {
-          startStage(currentStageIndex);
-        } else {
-          showVictory();
-        }
-      }, 3500);
-    }, 2500);
+      document.getElementById("speech-bubble").style.opacity = 0;
+      animal.classList.remove("happy");
+      animal.classList.remove("active-animal");
+      animal.classList.add("dimmed");
+      currentStageIndex++;
+      if (currentStageIndex < order.length) {
+        startStage(currentStageIndex);
+      } else {
+        showVictory();
+      }
+    }, dialogues[animalId].thanks.dur * 1000);
   }
 }
 
